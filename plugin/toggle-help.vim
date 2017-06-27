@@ -43,7 +43,10 @@ function! ToggleHelp(subject)
       " Open again to regain focus
       exec 'help '.a:subject
     else
-      helpclose
+      let only_help_window_remains = winnr('$') == 1
+      if !only_help_window_remains
+        helpclose
+      endif
     endif
 
     return
