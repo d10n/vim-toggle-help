@@ -18,6 +18,7 @@ function! ToggleHelp(subject, returnMode)
     try
       exec 'help '.a:subject
     catch /^Vim\%((\a\+)\)\=:E149/
+      call win_gotoid(current_winid)
       echohl ErrorMsg
       echomsg 'E149: Sorry, no help for '.a:subject
       echohl None
