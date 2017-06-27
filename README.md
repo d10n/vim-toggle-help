@@ -15,5 +15,5 @@ Toggle the vim help window on and off, like the Quake console.
 
  * The help tag stack can't be restored
  * Multiple help windows in a single tab are unsupported
- * vim-toggle-help can only restore help windows that it has seen. If you open and close a help page without having used :ToggleHelp, :ToggleHelp can't restore it.
+ * vim-toggle-help can only restore help windows that it has seen. You need to either open or close a help page with ToggleHelp in order for ToggleHelp to be able to restore it.
 
