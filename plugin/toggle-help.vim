@@ -93,7 +93,7 @@ function! ToggleHelp(subject, returnMode)
   call s:restore_return_mode(a:returnMode, last_winid, current_winid)
 endfunction
 
-function s:restore_return_mode(mode, current_winid, last_winid)
+function! s:restore_return_mode(mode, current_winid, last_winid)
   if a:mode == 'i'
     call win_gotoid(a:last_winid)
     call win_gotoid(a:current_winid)
