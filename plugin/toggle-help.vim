@@ -5,6 +5,8 @@ function! ToggleHelp(subject)
     let s:help_tabs = {}
   endif
   let current_winid = win_getid()
+  wincmd p
+  let last_winid = win_getid()
   let current_tab_help = {}
 
   let open_new_topic = len(a:subject) > 0
