@@ -32,7 +32,7 @@ function! ToggleHelp(subject)
 
   let help_is_open = !empty(current_tab_help)
   if help_is_open
-    " Record the open help 
+    " Record the open help
     let current_tab_help['lastwin'] = current_winid
     let s:help_tabs[tabpagenr()] = current_tab_help
     for window_id in window_ids
