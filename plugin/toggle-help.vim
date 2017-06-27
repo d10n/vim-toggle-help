@@ -25,9 +25,7 @@ function! ToggleHelp(subject)
   let window_ids = map(range(1, winnr('$')), 'win_getid(v:val)')
 
   " Get the help window
-  for window in range(1, winnr('$'))
-    exec window."windo if &buftype == 'help' | let current_tab_help = {'bufname': bufname(winbufnr(winnr())), 'file': expand('%:p'), 'view': winsaveview()} | endif"
-  endfor
+  exec "windo if &buftype == 'help' | let current_tab_help = {'bufname': bufname(winbufnr(winnr())), 'file': expand('%:p'), 'view': winsaveview()} | endif"
 
   " Set the previous window id so that focus returns to it if help is closd
   call win_gotoid(current_winid)
