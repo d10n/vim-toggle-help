@@ -1,4 +1,4 @@
-command! -nargs=? ToggleHelp call ToggleHelp(<q-args>)
+command! -nargs=? -bar -complete=help ToggleHelp call ToggleHelp(<q-args>)
 function! ToggleHelp(subject)
   if !exists('s:help_windows')
     let s:help_windows = {}
