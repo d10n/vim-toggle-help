@@ -1,5 +1,8 @@
-command! -nargs=? -bar -complete=help ToggleHelp call ToggleHelp(<q-args>)
-function! ToggleHelp(subject)
+command! -nargs=? -bar -complete=help ToggleHelp call ToggleHelp(<q-args>, '')
+
+" subject: help topic to load, or empty string to toggle help
+" returnMode: '' does nothing, 'i' returns to insert mode, 'v' returns to visual mode
+function! ToggleHelp(subject, returnMode)
   if !exists('s:help_windows')
     let s:help_windows = {}
     let s:help_tabs = {}
@@ -28,6 +31,7 @@ function! ToggleHelp(subject)
   exec "windo if &buftype == 'help' | let current_tab_help = {'bufname': bufname(winbufnr(winnr())), 'file': expand('%:p'), 'view': winsaveview()} | endif"
 
   " Set the previous window id so that focus returns to it if help is closd
+  call win_gotoid(last_winid)
   call win_gotoid(current_winid)
 
   let help_is_open = !empty(current_tab_help)
@@ -48,7 +52,7 @@ function! ToggleHelp(subject)
         helpclose
       endif
     endif
-
+    call s:restore_return_mode(a:returnMode, last_winid, current_winid)
     return
   endif
 
@@ -65,6 +69,7 @@ function! ToggleHelp(subject)
       exec 'edit '.fnameescape(help_for_this_window['file'])
     endtry
     exec 'call winrestview(help_for_this_window["view"])'
+    call s:restore_return_mode(a:returnMode, last_winid, current_winid)
     return
   endif
 
@@ -78,15 +83,31 @@ function! ToggleHelp(subject)
       exec 'edit '.fnameescape(help_for_this_tab['file'])
     endtry
     exec 'call winrestview(help_for_this_tab["view"])'
+    call s:restore_return_mode(a:returnMode, last_winid, current_winid)
     return
   endif
 
   " This is a new window and a new tab.
   " No new help was requested, so open the default help.
   help
+  call s:restore_return_mode(a:returnMode, last_winid, current_winid)
+endfunction
+
+function s:restore_return_mode(mode, current_winid, last_winid)
+  if a:mode == 'i'
+    call win_gotoid(a:last_winid)
+    call win_gotoid(a:current_winid)
+    startinsert
+  elseif a:mode == 'v'
+    call win_gotoid(a:last_winid)
+    call win_gotoid(a:current_winid)
+    normal gv
+  endif
 endfunction
 
 "nnoremap <F1> :ToggleHelp<CR>
+"inoremap <F1> <C-o>:call ToggleHelp('', 'i')<CR>
+"vnoremap <F1> <Esc>:call ToggleHelp('', 'v')<CR>
 "cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'ToggleHelp' : 'h'
 
 " vim: set ts=2 sw=2:et:

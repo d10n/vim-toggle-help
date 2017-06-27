@@ -5,6 +5,8 @@ Toggle the vim help window on and off, like the Quake console.
 
     Plug 'd10n/vim-toggle-help'
     nnoremap <F1> :ToggleHelp<CR>
+    inoremap <F1> <C-o>:call ToggleHelp('', 'i')<CR>
+    vnoremap <F1> <esc>:call ToggleHelp('', 'v')<CR>
 
     " Make :h expand to :ToggleHelp. Use :help to bypass.
     cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'ToggleHelp' : 'h'
@@ -15,6 +17,3 @@ Toggle the vim help window on and off, like the Quake console.
  * Multiple help windows in a single tab are unsupported
  * vim-toggle-help can only restore help windows that it has seen. If you open and close a help page without having used :ToggleHelp, :ToggleHelp can't restore it.
 
-## TODO
-
- * When toggling help on from insert mode, stay in insert mode
