@@ -7,6 +7,8 @@ function! ToggleHelp(subject, returnMode)
     let s:help_windows = {}
     let s:help_tabs = {}
   endif
+  let original_lazyredraw = &lazyredraw
+  set lazyredraw
   let current_winid = win_getid()
   wincmd p
   let last_winid = win_getid()
@@ -22,6 +24,7 @@ function! ToggleHelp(subject, returnMode)
       echohl ErrorMsg
       echomsg 'E149: Sorry, no help for '.a:subject
       echohl None
+      let &lazyredraw = original_lazyredraw
       return
     endtry
   endif
@@ -53,7 +56,7 @@ function! ToggleHelp(subject, returnMode)
         helpclose
       endif
     endif
-    call s:restore_return_mode(a:returnMode, last_winid, current_winid)
+    call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
     return
   endif
 
@@ -70,7 +73,7 @@ function! ToggleHelp(subject, returnMode)
       exec 'edit '.fnameescape(help_for_this_window['file'])
     endtry
     exec 'call winrestview(help_for_this_window["view"])'
-    call s:restore_return_mode(a:returnMode, last_winid, current_winid)
+    call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
     return
   endif
 
@@ -84,17 +87,17 @@ function! ToggleHelp(subject, returnMode)
       exec 'edit '.fnameescape(help_for_this_tab['file'])
     endtry
     exec 'call winrestview(help_for_this_tab["view"])'
-    call s:restore_return_mode(a:returnMode, last_winid, current_winid)
+    call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
     return
   endif
 
   " This is a new window and a new tab.
   " No new help was requested, so open the default help.
   help
-  call s:restore_return_mode(a:returnMode, last_winid, current_winid)
+  call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
 endfunction
 
-function! s:restore_return_mode(mode, current_winid, last_winid)
+function! s:restore_return_mode(mode, current_winid, last_winid, original_lazyredraw)
   if a:mode == 'i'
     call win_gotoid(a:last_winid)
     call win_gotoid(a:current_winid)
@@ -104,6 +107,7 @@ function! s:restore_return_mode(mode, current_winid, last_winid)
     call win_gotoid(a:current_winid)
     normal gv
   endif
+  let &lazyredraw = a:original_lazyredraw
 endfunction
 
 "nnoremap <F1> :ToggleHelp<CR>
