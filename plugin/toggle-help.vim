@@ -115,4 +115,4 @@ endfunction
 "vnoremap <F1> <Esc>:call ToggleHelp('', 'v')<CR>
 "cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'ToggleHelp' : 'h'
 
-" vim: set ts=2 sw=2:et:
+" vim: set ts=2 sw=2 et:
