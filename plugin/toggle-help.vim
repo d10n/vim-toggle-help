@@ -109,6 +109,6 @@ endfunction
 "nnoremap <F1> :ToggleHelp<CR>
 "inoremap <F1> <C-o>:call ToggleHelp('', 'i')<CR>
 "vnoremap <F1> <Esc>:call ToggleHelp('', 'v')<CR>
-"cnoreabbrev <expr> h getcmdtype() == ":" && getcmdline() == 'h' ? 'ToggleHelp' : 'h'
+"cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'ToggleHelp' : 'h'
 
 " vim: set ts=2 sw=2:et:
