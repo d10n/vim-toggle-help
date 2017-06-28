@@ -8,7 +8,7 @@ Toggle the vim help window on and off, like the Quake console.
     inoremap <F1> <C-o>:call ToggleHelp('', 'i')<CR>
     vnoremap <F1> <esc>:call ToggleHelp('', 'v')<CR>
 
-    " Make :h expand to :ToggleHelp. Use :help to bypass.
+    " Optional: make :h expand to :ToggleHelp. Use :help to bypass.
     cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'ToggleHelp' : 'h'
 
 ## Caveats
