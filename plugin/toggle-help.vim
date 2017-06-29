@@ -48,7 +48,7 @@ endfunction
 
 augroup toggle_help
   autocmd!
-  autocmd WinLeave * if &buftype == 'help' | call s:buf_win_leave_seen(expand('%:p'), expand('%'), s:my_win_getid(winnr()), winsaveview()) | endif
+  autocmd WinLeave * if &buftype ==# 'help' | call s:buf_win_leave_seen(expand('%:p'), expand('%'), s:my_win_getid(winnr()), winsaveview()) | endif
 augroup END
 
 function! s:buf_win_leave_seen(filename, bufname, window_number, window_view)
@@ -90,7 +90,7 @@ function! ToggleHelp(returnMode)
   " Get the help window
   for window in range(1, winnr('$'))
     let window_type = getwinvar(window, '&buftype')
-    if window_type == 'help'
+    if window_type ==# 'help'
       let help_winnr = window
       break
     endif
@@ -144,11 +144,11 @@ function! ToggleHelp(returnMode)
 endfunction
 
 function! s:restore_return_mode(mode, last_winid, current_winid, original_lazyredraw)
-  if a:mode == 'i'
+  if a:mode ==# 'i'
     call s:my_win_gotoid(a:last_winid)
     call s:my_win_gotoid(a:current_winid)
     startinsert
-  elseif a:mode == 'v'
+  elseif a:mode ==# 'v'
     call s:my_win_gotoid(a:last_winid)
     call s:my_win_gotoid(a:current_winid)
     normal gv
