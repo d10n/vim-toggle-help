@@ -4,6 +4,10 @@ if exists('g:loaded_toggle_help')
 endif
 let g:loaded_toggle_help = 1
 
+if !exists('g:toggle_help_per_window')
+  let g:toggle_help_per_window = 0
+endif
+
 command! -bar ToggleHelp call ToggleHelp('')
 
 " Window ID shim
@@ -60,17 +64,31 @@ function! s:save_current_tab_help(filename, bufname, current_winid, window_view)
     let s:help_windows = {}
     let s:help_tabs = {}
   endif
+  let original_lazyredraw = &lazyredraw
+  set lazyredraw
+  if &filetype ==# 'help'
+    wincmd p
+    let last_winid = s:my_win_getid(winnr())
+    wincmd p
+  else
+    let last_winid = a:current_winid
+  endif
+  let &lazyredraw = original_lazyredraw
 
   let current_tab_help = {}
-  let current_tab_help['lastwin'] = a:current_winid
+  let current_tab_help['lastwin'] = last_winid
   let current_tab_help['bufname'] = a:bufname
   let current_tab_help['file'] = a:filename
   let current_tab_help['view'] = a:window_view
   let s:help_tabs[tabpagenr()] = current_tab_help
-  let window_ids = map(range(1, winnr('$')), 's:my_win_getid(v:val)')
-  for window_id in window_ids
-    let s:help_windows[window_id] = current_tab_help
-  endfor
+  if g:toggle_help_per_window
+    let s:help_windows[last_winid] = current_tab_help
+  else
+    let window_ids = map(range(1, winnr('$')), 's:my_win_getid(v:val)')
+    for window_id in window_ids
+      let s:help_windows[window_id] = current_tab_help
+    endfor
+  endif
 endfunction
 
 " returnMode: '' does nothing, 'i' returns to insert mode, 'v' returns to visual mode
@@ -108,19 +126,22 @@ function! ToggleHelp(returnMode)
 
   " Help is not open
 
-  " Reopen the last help that this window has seen
-  let help_for_this_window = get(s:help_windows, current_winid)
-  if !empty(help_for_this_window)
-    try
-      exec 'help '.help_for_this_window['bufname']
-    catch " E149: Sorry, no help for multiple_cursors
-      " Work around bad plugin help
-      silent! help
-      exec 'edit '.fnameescape(help_for_this_window['file'])
-    endtry
-    exec 'call winrestview(help_for_this_window["view"])'
-    call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
-    return
+  " Associate help topics with individual windows
+  if g:toggle_help_per_window
+    " Reopen the last help that this window has seen
+    let help_for_this_window = get(s:help_windows, current_winid)
+    if !empty(help_for_this_window)
+      try
+        exec 'help '.help_for_this_window['bufname']
+      catch " E149: Sorry, no help for multiple_cursors
+        " Work around bad plugin help
+        silent! help
+        exec 'edit '.fnameescape(help_for_this_window['file'])
+      endtry
+      exec 'call winrestview(help_for_this_window["view"])'
+      call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
+      return
+    endif
   endif
 
   " This is a new window. Reopen the last help this tab has seen.
