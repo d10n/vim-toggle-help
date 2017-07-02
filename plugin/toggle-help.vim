@@ -41,7 +41,7 @@ function! s:my_win_gotoid(window_id)
   endif
   for window in range(1, winnr('$'))
     if getwinvar(window, 'toggle_help_winid') == a:window_id
-      exec window.'wincmd w'
+      execute window.'wincmd w'
       return
     endif
   endfor
@@ -132,13 +132,13 @@ function! ToggleHelp(returnMode)
     let help_for_this_window = get(s:help_windows, current_winid)
     if !empty(help_for_this_window)
       try
-        exec 'help '.help_for_this_window['bufname']
+        execute 'help '.help_for_this_window['bufname']
       catch " E149: Sorry, no help for multiple_cursors
         " Work around bad plugin help
         silent! help
-        exec 'edit '.fnameescape(help_for_this_window['file'])
+        execute 'edit '.fnameescape(help_for_this_window['file'])
       endtry
-      exec 'call winrestview(help_for_this_window["view"])'
+      execute 'call winrestview(help_for_this_window["view"])'
       call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
       return
     endif
@@ -148,12 +148,12 @@ function! ToggleHelp(returnMode)
   let help_for_this_tab = get(s:help_tabs, tabpagenr())
   if !empty(help_for_this_tab)
     try
-      exec 'help '.help_for_this_tab['bufname']
+      execute 'help '.help_for_this_tab['bufname']
     catch
       silent! help
-      exec 'edit '.fnameescape(help_for_this_tab['file'])
+      execute 'edit '.fnameescape(help_for_this_tab['file'])
     endtry
-    exec 'call winrestview(help_for_this_tab["view"])'
+    execute 'call winrestview(help_for_this_tab["view"])'
     call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
     return
   endif
