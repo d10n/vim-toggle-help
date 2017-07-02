@@ -172,7 +172,7 @@ function! s:restore_return_mode(mode, last_winid, current_winid, original_lazyre
   elseif a:mode ==# 'v'
     call s:my_win_gotoid(a:last_winid)
     call s:my_win_gotoid(a:current_winid)
-    normal gv
+    normal! gv
   endif
   let &lazyredraw = a:original_lazyredraw
 endfunction
