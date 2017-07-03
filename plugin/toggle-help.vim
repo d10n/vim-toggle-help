@@ -108,7 +108,7 @@ function! s:save_current_tab_help(filename, bufname, current_winid, window_view)
 endfunction
 
 " returnMode: '' does nothing, 'i' returns to insert mode, 'v' returns to visual mode
-function! ToggleHelp(returnMode)
+function! s:toggle_help(returnMode)
   if !exists('s:help_windows')
     let s:help_windows = {}
     let s:help_tabs = {}
@@ -203,10 +203,10 @@ augroup toggle_help
     \ endif
 augroup END
 
-command! -bar ToggleHelp call ToggleHelp('')
+command! -bar ToggleHelp call s:toggle_help('')
 
-"nnoremap <F1> :ToggleHelp<CR>
-"inoremap <F1> <C-o>:call ToggleHelp('i')<CR>
-"vnoremap <F1> <Esc>:call ToggleHelp('v')<CR>
+nnoremap <silent> <Plug>(toggle-help-n) :call <SID>toggle_help('')<CR>
+inoremap <silent> <Plug>(toggle-help-i) <C-o>:call <SID>toggle_help('i')<CR>
+vnoremap <silent> <Plug>(toggle-help-v) <Esc>:call <SID>toggle_help('v')<CR>
 
 " vim: set ts=2 sw=2 et fdm=marker:

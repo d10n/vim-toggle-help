@@ -4,9 +4,9 @@ vim-toggle-help
 Toggle the vim help window on and off, like the Quake console.
 
     Plug 'd10n/vim-toggle-help'
-    nnoremap <F1> :ToggleHelp<CR>
-    inoremap <F1> <C-o>:call ToggleHelp('i')<CR>
-    vnoremap <F1> <esc>:call ToggleHelp('v')<CR>
+    nmap <F1> <Plug>(toggle-help-n)
+    imap <F1> <Plug>(toggle-help-i)
+    vmap <F1> <Plug>(toggle-help-v)
 
 ## Caveats
 
