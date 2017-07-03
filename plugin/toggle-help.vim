@@ -8,7 +8,7 @@ if !exists('g:toggle_help_per_window')
   let g:toggle_help_per_window = 0
 endif
 
-" Window ID shim
+" Window ID shim (vim7 compatibility) {{{
 let s:window_id_builtin = exists('*win_getid')
 if !s:window_id_builtin
   let s:win_id_counter = 1000
@@ -45,9 +45,31 @@ function! s:my_win_gotoid(window_id)
   endfor
   " do nothing if there was no matching id
 endfunction
+" }}}
 
-" Help toggling
+" helpclose shim (vim7 compatibility) {{{
+let s:helpclose_builtin = has('patch-7.4.449')
+function! s:my_helpclose(help_winnr)
+  if s:helpclose_builtin
+    helpclose
+  else
+    execute a:help_winnr.'wincmd q'
+  endif
+endfunction
+" }}}
 
+" fnameescape shim (vim7 compatibility) {{{
+let s:fnameescape_builtin = has('patch-7.1.299')
+function! s:my_fnameescape(fname)
+  if s:fnameescape_builtin
+    return fnameescape(a:fname)
+  else
+    return escape(a:fname, " \t\n*?[{`$\\%#'\"|!<")  " See :help fnameescape()
+  endif
+endfunction
+" }}}
+
+" Help toggling {{{
 
 function! s:buf_win_leave_seen(filename, bufname, window_number, window_view)
   call s:save_current_tab_help(a:filename, a:bufname, a:window_number, a:window_view)
@@ -112,7 +134,7 @@ function! ToggleHelp(returnMode)
   if help_is_open
     let only_help_window_remains = winnr('$') == 1
     if !only_help_window_remains
-      helpclose
+      call s:my_helpclose(help_winnr)
     endif
     call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
     return
@@ -130,7 +152,7 @@ function! ToggleHelp(returnMode)
       catch " E149: Sorry, no help for multiple_cursors
         " Work around bad plugin help
         silent! help
-        execute 'edit '.fnameescape(help_for_this_window['file'])
+        execute 'edit '.s:my_fnameescape(help_for_this_window['file'])
       endtry
       execute 'call winrestview(help_for_this_window["view"])'
       call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
@@ -145,7 +167,7 @@ function! ToggleHelp(returnMode)
       execute 'help '.help_for_this_tab['bufname']
     catch
       silent! help
-      execute 'edit '.fnameescape(help_for_this_tab['file'])
+      execute 'edit '.s:my_fnameescape(help_for_this_tab['file'])
     endtry
     execute 'call winrestview(help_for_this_tab["view"])'
     call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
@@ -187,4 +209,4 @@ command! -bar ToggleHelp call ToggleHelp('')
 "inoremap <F1> <C-o>:call ToggleHelp('i')<CR>
 "vnoremap <F1> <Esc>:call ToggleHelp('v')<CR>
 
-" vim: set ts=2 sw=2 et:
+" vim: set ts=2 sw=2 et fdm=marker:
