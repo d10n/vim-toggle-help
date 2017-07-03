@@ -7,9 +7,9 @@ Toggle the vim help window on and off, like the Quake console.
 
 Press `<F1>` to toggle or customize your maps:
 
-    nmap ? <Plug>(toggle-help-n)
-    imap ? <Plug>(toggle-help-i)
-    vmap ? <Plug>(toggle-help-v)
+    nmap <C-_> <Plug>(toggle-help-n)
+    imap <C-_> <Plug>(toggle-help-i)
+    vmap <C-_> <Plug>(toggle-help-v)
 
 ## Caveats
 
