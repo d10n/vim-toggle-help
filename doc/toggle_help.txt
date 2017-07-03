@@ -1,5 +1,5 @@
 *toggle_help.txt*	For Vim version 7.0	Last change: 2017 July 3
-*toggle-help*
+*toggle-help* *vim-toggle-help*
 
     ||                         '||`            '||            '||`           ~
     ||                          ||              ||             ||            ~
@@ -29,7 +29,7 @@ window all the time.
 
 USAGE                                                      *toggle-help-usage*
 
-When the help window is open, press <F1> to close it.
+When the help window is open, press <F1> to close it.       *toggle-help-<F1>*
 When the help window is closed, press <F1> to open it.
 Each tab keeps track of its help window.
 
