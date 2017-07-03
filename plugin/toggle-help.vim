@@ -50,10 +50,6 @@ endfunction
 
 " Help toggling
 
-augroup toggle_help
-  autocmd!
-  autocmd WinLeave * if &buftype ==# 'help' | call s:buf_win_leave_seen(expand('%:p'), expand('%'), s:my_win_getid(winnr()), winsaveview()) | endif
-augroup END
 
 function! s:buf_win_leave_seen(filename, bufname, window_number, window_view)
   call s:save_current_tab_help(a:filename, a:bufname, a:window_number, a:window_view)
@@ -177,6 +173,13 @@ function! s:restore_return_mode(mode, last_winid, current_winid, original_lazyre
   let &lazyredraw = a:original_lazyredraw
 endfunction
 
+augroup toggle_help
+  autocmd!
+  autocmd WinLeave *
+    \ if &buftype ==# 'help' |
+      \ call s:buf_win_leave_seen(expand('%:p'), expand('%'), s:my_win_getid(winnr()), winsaveview()) |
+    \ endif
+augroup END
 "nnoremap <F1> :ToggleHelp<CR>
 "inoremap <F1> <C-o>:call ToggleHelp('i')<CR>
 "vnoremap <F1> <Esc>:call ToggleHelp('v')<CR>
