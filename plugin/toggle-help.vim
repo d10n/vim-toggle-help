@@ -209,4 +209,10 @@ nnoremap <silent> <Plug>(toggle-help-n) :call <SID>toggle_help('')<CR>
 inoremap <silent> <Plug>(toggle-help-i) <C-o>:call <SID>toggle_help('i')<CR>
 vnoremap <silent> <Plug>(toggle-help-v) <Esc>:call <SID>toggle_help('v')<CR>
 
+if !get(g:, 'toggle_help_disable_default_map')
+  nmap <F1> <Plug>(toggle-help-n)
+  imap <F1> <Plug>(toggle-help-i)
+  vmap <F1> <Plug>(toggle-help-v)
+endif
+
 " vim: set ts=2 sw=2 et fdm=marker:

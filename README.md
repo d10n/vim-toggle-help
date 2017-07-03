@@ -4,9 +4,12 @@ vim-toggle-help
 Toggle the vim help window on and off, like the Quake console.
 
     Plug 'd10n/vim-toggle-help'
-    nmap <F1> <Plug>(toggle-help-n)
-    imap <F1> <Plug>(toggle-help-i)
-    vmap <F1> <Plug>(toggle-help-v)
+
+Press `<F1>` to toggle or customize your maps:
+
+    nmap ? <Plug>(toggle-help-n)
+    imap ? <Plug>(toggle-help-i)
+    vmap ? <Plug>(toggle-help-v)
 
 ## Caveats
 
