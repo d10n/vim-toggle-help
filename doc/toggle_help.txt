@@ -37,7 +37,7 @@ When in normal mode and toggling help on, the help window gets focus.
 When in normal mode and toggling help off, the previous window gets focus.
 When in insert or visual mode, help is toggled without changing focus.
 
-The `:ToggleHelp` command is also available.
+The `:ToggleHelp` command is also available.                     *:ToggleHelp*
 
 
 MAPPINGS                                                *toggle-help-mappings*
