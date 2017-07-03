@@ -49,9 +49,9 @@ This plugin maps to <F1> to augment the default behavior:
 
 You can add custom mappings: >
 
-    nmap ? <Plug>(toggle_help_n)
-    imap ? <Plug>(toggle_help_i)
-    vmap ? <Plug>(toggle_help_v)
+    nmap ? <Plug>(toggle-help-n)
+    imap ? <Plug>(toggle-help-i)
+    vmap ? <Plug>(toggle-help-v)
 <
 
 GLOBAL OPTIONS                                    *toggle-help-global-options*
