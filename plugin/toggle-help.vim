@@ -8,8 +8,6 @@ if !exists('g:toggle_help_per_window')
   let g:toggle_help_per_window = 0
 endif
 
-command! -bar ToggleHelp call ToggleHelp('')
-
 " Window ID shim
 let s:window_id_builtin = exists('*win_getid')
 if !s:window_id_builtin
@@ -173,6 +171,8 @@ function! s:restore_return_mode(mode, last_winid, current_winid, original_lazyre
   let &lazyredraw = a:original_lazyredraw
 endfunction
 
+" }}}
+
 augroup toggle_help
   autocmd!
   autocmd WinLeave *
@@ -180,6 +180,9 @@ augroup toggle_help
       \ call s:buf_win_leave_seen(expand('%:p'), expand('%'), s:my_win_getid(winnr()), winsaveview()) |
     \ endif
 augroup END
+
+command! -bar ToggleHelp call ToggleHelp('')
+
 "nnoremap <F1> :ToggleHelp<CR>
 "inoremap <F1> <C-o>:call ToggleHelp('i')<CR>
 "vnoremap <F1> <Esc>:call ToggleHelp('v')<CR>
