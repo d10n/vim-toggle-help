@@ -1,0 +1,101 @@
+*toggle_help.txt*	For Vim version 7.0	Last change: 2017 July 3
+*toggle-help*
+
+    ||                         '||`            '||            '||`           ~
+    ||                          ||              ||             ||            ~
+  ''||''  .|''|, .|''|, .|''|,  ||  .|''|, ---  ||''|, .|''|,  ||  '||''|,   ~
+    ||    ||  || ||  || ||  ||  ||  ||..||      ||  || ||..||  ||   ||  ||   ~
+    `|..' `|..|' `|..|| `|..|| .||. `|...      .||  || `|...  .||.  ||..|'   ~
+`````````````````````||`````||``````````````````````````````````````||```````~
+                  `..|'  `..|'                                     .||       ~
+
+CONTENTS                                                *toggle-help-contents*
+
+    1. Introduction ........................... |toggle-help-intro|
+    2. Usage .................................. |toggle-help-usage|
+    3. Mappings ............................... |toggle-help-mappings|
+    4. Global Options ......................... |toggle-help-global-options|
+    5. Issues ................................. |toggle-help-issues|
+    6. About .................................. |toggle-help-about|
+    7. License ................................ |toggle-help-license|
+
+
+INTRODUCTION                                               *toggle-help-intro*
+
+Toggle the help window on and off, like the Quake console.
+Save screen real estate and keystrokes when you don't need to look at the help
+window all the time.
+
+
+USAGE                                                      *toggle-help-usage*
+
+When the help window is open, press <F1> to close it.
+When the help window is closed, press <F1> to open it.
+Each tab keeps track of its help window.
+
+When in normal mode and toggling help on, the help window gets focus.
+When in normal mode and toggling help off, the previous window gets focus.
+When in insert or visual mode, help is toggled without changing focus.
+
+The `:ToggleHelp` command is also available.
+
+
+MAPPINGS                                                *toggle-help-mappings*
+
+The default vi behavior of <F1> is to open the first help page.
+This plugin maps to <F1> to augment the default behavior:
+ * If no help has been opened yet, the first help page is opened.
+ * If help has been opened, the help window is toggled on and off.
+
+You can add custom mappings: >
+
+    nmap ? <Plug>(toggle_help_n)
+    imap ? <Plug>(toggle_help_i)
+    vmap ? <Plug>(toggle_help_v)
+<
+
+GLOBAL OPTIONS                                    *toggle-help-global-options*
+
+                                           *g:toggle_help_disable_default_map*
+Type: boolean
+Default: 0
+Set this to 1 to prevent the plugin from mapping the <F1> key. >
+    let g:toggle_help_disable_default_map = 1
+<
+                                                    *g:toggle_help_per_window*
+Type: boolean
+Default: 0
+By default, each tab keeps track of a single help window.
+Set this to 1 if you want each regular window to keep track of its last-opened
+help window. Only one help window can still be opened per tab.
+The regular window that has focus when closing a help window gets assigned
+that help window, so you will need to close the help window from the regular
+window that you want it to reappear on. >
+    let g:toggle_help_per_window = 1
+<
+                                                        *g:loaded_toggle_help*
+Type: boolean
+Default: 0
+Set this to 1 to prevent the plugin fom loading. >
+    let g:loaded_toggle_help = 1
+<
+
+ISSUES                                                    *toggle-help-issues*
+
+ * The help tag stack can't be restored
+ * Multiple help windows in a single tab are unsupported
+
+
+ABOUT                                                      *toggle-help-about*
+
+Written and maintained by d10n.
+File bugs and contribute at:
+
+    https://github.com/d10n/vim-toggle-help
+
+
+LICENSE                                                  *toggle-help-license*
+
+vim-toggle-help is released under the MIT License.
+
+vim:tw=78:cc=78:ts=8:ft=help:norl:et:fen:fdl=0:
