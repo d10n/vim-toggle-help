@@ -107,6 +107,17 @@ function! s:save_current_tab_help(filename, bufname, current_winid, window_view)
   endif
 endfunction
 
+function! s:restore_help_window(saved_help_state)
+  try
+    execute 'help '.a:saved_help_state['bufname']
+  catch " E149: Sorry, no help for multiple_cursors
+    " Work around bad plugin help
+    silent! help
+    execute 'edit '.s:my_fnameescape(a:saved_help_state['file'])
+  endtry
+  call winrestview(a:saved_help_state['view'])
+endfunction
+
 " returnMode: '' does nothing, 'i' returns to insert mode, 'v' returns to visual mode
 function! s:toggle_help(returnMode)
   if !exists('s:help_windows')
@@ -147,14 +158,7 @@ function! s:toggle_help(returnMode)
     " Reopen the last help that this window has seen
     let help_for_this_window = get(s:help_windows, current_winid)
     if !empty(help_for_this_window)
-      try
-        execute 'help '.help_for_this_window['bufname']
-      catch " E149: Sorry, no help for multiple_cursors
-        " Work around bad plugin help
-        silent! help
-        execute 'edit '.s:my_fnameescape(help_for_this_window['file'])
-      endtry
-      execute 'call winrestview(help_for_this_window["view"])'
+      call s:restore_help_window(help_for_this_window)
       call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
       return
     endif
@@ -163,13 +167,7 @@ function! s:toggle_help(returnMode)
   " This is a new window. Reopen the last help this tab has seen.
   let help_for_this_tab = get(s:help_tabs, tabpagenr())
   if !empty(help_for_this_tab)
-    try
-      execute 'help '.help_for_this_tab['bufname']
-    catch
-      silent! help
-      execute 'edit '.s:my_fnameescape(help_for_this_tab['file'])
-    endtry
-    execute 'call winrestview(help_for_this_tab["view"])'
+    call s:restore_help_window(help_for_this_tab)
     call s:restore_return_mode(a:returnMode, last_winid, current_winid, original_lazyredraw)
     return
   endif
